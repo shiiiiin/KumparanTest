@@ -4,7 +4,7 @@ import { ListUser, ListPost, AddPost } from "../components";
 import ListAlbums from "../components/listAlbums/listAlbums";
 
 const Home = () => {
-  const [menuActive, setMenuActive] = useState("albums");
+  const [menuActive, setMenuActive] = useState("posts");
 
   const handleMenu = (e) => {
     setMenuActive(e.target.value);
