@@ -4,15 +4,26 @@ import PropTypes from "prop-types";
 import { Collapse } from "react-collapse";
 import { useDispatch, useSelector } from "react-redux";
 import { getPhotosByAlbum } from "../../actions/actions";
+import DetailPhoto from "./detailPhoto";
 
 const ListPhotos = ({ album }) => {
   const dispatch = useDispatch();
   const photos = useSelector((state) => state.albums.photos);
   const selectedPhotos = photos[album.id.toString()];
   const [openCollapse, setOpenCollapse] = useState(false);
+  const [openModalDetail, setopenModalDetail] = useState(false);
+  const [image, setimage] = useState("");
   const handleSeePhotos = () => {
     setOpenCollapse(!openCollapse);
     if (!openCollapse) dispatch(getPhotosByAlbum(album.id));
+  };
+  const handleOpenDetail = (image) => {
+    setimage(image);
+    setopenModalDetail(true);
+  };
+  const handleCloseDetail = () => {
+    setimage("");
+    setopenModalDetail(false);
   };
   return (
     <div>
@@ -35,19 +46,26 @@ const ListPhotos = ({ album }) => {
                             marginLeft: "auto",
                             marginRight: "auto",
                             width: "50%",
+                            cursor: "zoom-in",
                           }}
                           src={photo.thumbnailUrl}
                           size="small"
+                          onClick={() => handleOpenDetail(photo.url)}
                         />
                         <p>{photo.title}</p>
                       </Card>
                     </Grid.Column>
                   ))
-                : "No Photos"}
+                : "Loading..."}
             </Grid.Row>
           </Grid>
         </Segment>
       </Collapse>
+      <DetailPhoto
+        image={image}
+        isOpen={openModalDetail}
+        handleClose={handleCloseDetail}
+      />
     </div>
   );
 };
