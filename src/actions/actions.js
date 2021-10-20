@@ -5,6 +5,7 @@ import {
   POST_REPLY,
   PUT_REPLY,
   DELETE_REPLY,
+  POST_POSTING,
 } from "./actionTypes";
 import {
   getUserListApi,
@@ -12,6 +13,7 @@ import {
   getCommentsByPostIdApi,
   postReplyApi,
   deleteReplyApi,
+  postPostingApi,
 } from "../api/api";
 
 export const getUserList = () => {
@@ -94,6 +96,22 @@ export const deleteReply = (postId, commentId) => {
     return dispatch({
       type: DELETE_REPLY,
       payload: deleteReplyApi(postId, commentId),
+    });
+  };
+};
+
+export const postPosting = (title, body) => {
+  return (dispatch, getState) => {
+    const store = getState();
+    const loginUser = store.user.loginUser;
+    const dataPosting = {
+      userId: loginUser.id,
+      title: title,
+      body: body,
+    };
+    return dispatch({
+      type: POST_POSTING,
+      payload: postPostingApi(dataPosting),
     });
   };
 };

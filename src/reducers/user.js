@@ -7,9 +7,10 @@ import {
 
 const initialstate = {
   loginUser: {
-    email: "shintiatria@gmail.com",
-    name: "Shintia Tria Sari",
-    username: "Shintiatria",
+    id: 1,
+    name: "Leanne Graham",
+    username: "Bret",
+    email: "Sincere@april.biz",
   },
   users: {
     meta: { isLoading: false },

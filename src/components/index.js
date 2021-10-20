@@ -1,3 +1,4 @@
 import ListUser from "./listUser/listUser";
 import ListPost from "./listPost/listPost";
-export { ListUser, ListPost };
+import AddPost from "./addPost/addPost";
+export { ListUser, ListPost, AddPost };

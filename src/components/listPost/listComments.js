@@ -4,12 +4,7 @@ import { Collapse } from "react-collapse";
 import PropTypes from "prop-types";
 import userImage from "./../../assets/mexican.png";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  postReply,
-  putReply,
-  deleteReply,
-  getCommentsByPostId,
-} from "../../actions/actions";
+import { postReply, putReply, deleteReply } from "../../actions/actions";
 
 const ListComments = ({ comments, postId }) => {
   const dispatch = useDispatch();
@@ -49,15 +44,14 @@ const ListComments = ({ comments, postId }) => {
     setIdComment(null);
   };
 
-  const handleEdit = async (bodyReply, commentId) => {
+  const handleEdit = (bodyReply, commentId) => {
     setIsEdit(true);
     setReply(bodyReply);
     setIdComment(commentId);
   };
 
-  const handleDelete = async (commentId) => {
+  const handleDelete = (commentId) => {
     postId && dispatch(deleteReply(postId, commentId));
-    postId && dispatch(getCommentsByPostId(postId));
   };
   return (
     <Item.Extra>

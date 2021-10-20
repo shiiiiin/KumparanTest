@@ -37,7 +37,9 @@ const ListPost = () => {
       {error ? (
         <p>{error}</p>
       ) : (
-        posts?.reverse()?.map((post) => {
+        posts &&
+        posts.length > 0 &&
+        posts.map((post) => {
           const user = users?.find((user) => user.id === post.userId) ?? null;
           return (
             <Item key={post.id}>

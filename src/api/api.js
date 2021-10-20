@@ -19,3 +19,7 @@ export const postReplyApi = (postId, dataReply) => {
 export const deleteReplyApi = (commentId) => {
   return apiClient.delete(`/comments/${commentId}`);
 };
+
+export const postPostingApi = (dataPosting) => {
+  return apiClient.post(`/posts`, dataPosting);
+};

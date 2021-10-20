@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import { ListUser, ListPost } from "../components";
+import { ListUser, ListPost, AddPost } from "../components";
 
 const Home = () => {
   return (
@@ -12,6 +12,7 @@ const Home = () => {
             <ListUser />
           </Grid.Column>
           <Grid.Column width={13}>
+            <AddPost />
             <ListPost />
           </Grid.Column>
         </Grid.Row>

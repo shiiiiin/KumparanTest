@@ -12,6 +12,10 @@ import {
   POST_REPLY_FULFILLED,
   POST_REPLY_REJECTED,
   PUT_REPLY,
+  POST_POSTING,
+  POST_POSTING_PENDING,
+  POST_POSTING_FULFILLED,
+  POST_POSTING_REJECTED,
 } from "../actions/actionTypes";
 import _ from "lodash";
 const initialstate = {
@@ -21,6 +25,8 @@ const initialstate = {
   },
   isLoadingPostReply: false,
   errorPostReply: "",
+  isLoadingPosting: false,
+  errorPosting: "",
 };
 
 const reducer = (state = initialstate, action) => {
@@ -35,7 +41,9 @@ const reducer = (state = initialstate, action) => {
       return {
         ...state,
         posts: {
-          data: action.payload.data,
+          data: action.payload.data
+            ? action.payload.data.reverse()
+            : action.payload.data,
           meta: {
             isLoading: false,
           },
@@ -106,9 +114,12 @@ const reducer = (state = initialstate, action) => {
       let newPosts = _.clone(state.posts.data);
       // eslint-disable-next-line
       const selectedIdxPost = newPosts.findIndex((post) => post.id == postId);
+      const comments = newPosts[selectedIdxPost].comments;
       newPosts[selectedIdxPost] = {
         ...newPosts[selectedIdxPost],
-        comments: [...newPosts[selectedIdxPost].comments, action.payload.data],
+        comments: comments
+          ? [...comments, action.payload.data]
+          : [action.payload.data],
       };
 
       return {
@@ -152,6 +163,32 @@ const reducer = (state = initialstate, action) => {
         },
       };
     }
+
+    case POST_POSTING: {
+      return { ...state };
+    }
+    case POST_POSTING_PENDING: {
+      return { ...state, isLoadingPosting: true };
+    }
+    case POST_POSTING_FULFILLED: {
+      let clonePosts = _.clone(state.posts.data);
+      clonePosts.unshift(action.payload.data);
+      return {
+        ...state,
+        posts: {
+          data: clonePosts,
+        },
+        isLoadingPosting: false,
+      };
+    }
+    case POST_POSTING_REJECTED: {
+      return {
+        ...state,
+        isLoadingPosting: false,
+        errorPosting: "Failed, please try again",
+      };
+    }
+
     default:
       return state;
   }
