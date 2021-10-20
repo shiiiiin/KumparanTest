@@ -9,6 +9,7 @@ import {
   PUT_POSTING,
   DELETE_POSTING,
   GET_ALBUMS,
+  GET_PHOTOS_BY_ALBUM,
 } from "./actionTypes";
 import {
   getUserListApi,
@@ -17,6 +18,7 @@ import {
   postReplyApi,
   postPostingApi,
   getAlbumsApi,
+  getPhotosByAlbumApi,
 } from "../api/api";
 
 export const getUserList = () => {
@@ -142,6 +144,16 @@ export const getAlbums = () => {
     return dispatch({
       type: GET_ALBUMS,
       payload: getAlbumsApi(),
+    });
+  };
+};
+
+export const getPhotosByAlbum = (albumId) => {
+  return (dispatch) => {
+    return dispatch({
+      type: GET_PHOTOS_BY_ALBUM,
+      payload: getPhotosByAlbumApi(albumId),
+      data: { albumId },
     });
   };
 };

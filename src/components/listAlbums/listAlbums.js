@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Dimmer, Grid, Loader } from "semantic-ui-react";
+import { Dimmer, Grid, Loader } from "semantic-ui-react";
 import { getAlbums } from "../../actions/actions";
+import ListPhotos from "./listPhotos";
 
 const ListAlbums = () => {
   const dispatch = useDispatch();
@@ -42,14 +43,10 @@ const ListAlbums = () => {
                   <b>{album.title}</b>
                   <p style={{ color: "gray", marginLeft: "5px" }}>
                     {" "}
-                    by {user.username}
+                    by {user?.username}
                   </p>
                 </p>
-
-                <Button
-                  content="See Photos"
-                  style={{ background: "transparent", padding: "0" }}
-                />
+                <ListPhotos album={album} />
               </Grid.Column>
             </Grid.Row>
           );

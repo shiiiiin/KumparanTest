@@ -27,3 +27,7 @@ export const postPostingApi = (dataPosting) => {
 export const getAlbumsApi = () => {
   return apiClient.get(`/albums`);
 };
+
+export const getPhotosByAlbumApi = (albumId) => {
+  return apiClient.get(`/albums/${albumId}/photos`);
+};
