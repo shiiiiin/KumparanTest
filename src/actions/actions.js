@@ -4,12 +4,14 @@ import {
   GET_COMMENTS_BY_POST_ID,
   POST_REPLY,
   PUT_REPLY,
+  DELETE_REPLY,
 } from "./actionTypes";
 import {
   getUserListApi,
   getPostListApi,
   getCommentsByPostIdApi,
   postReplyApi,
+  deleteReplyApi,
 } from "../api/api";
 
 export const getUserList = () => {
@@ -30,8 +32,14 @@ export const getPostList = () => {
   };
 };
 
-export const getCommentsByPostId = () => {
+export const getCommentsByPostId = ({ postId }) => {
   return (dispatch, getState) => {
+    if (postId) {
+      return dispatch({
+        type: GET_COMMENTS_BY_POST_ID,
+        payload: getCommentsByPostIdApi(postId),
+      });
+    }
     const store = getState(),
       posts = store.post?.posts?.data ?? [];
     posts.map(async (post) => {
@@ -77,6 +85,15 @@ export const putReply = (postId, idComment, reply) => {
     return dispatch({
       type: PUT_REPLY,
       data: { postId, idComment, dataReply },
+    });
+  };
+};
+
+export const deleteReply = (postId, commentId) => {
+  return (dispatch) => {
+    return dispatch({
+      type: DELETE_REPLY,
+      payload: deleteReplyApi(postId, commentId),
     });
   };
 };

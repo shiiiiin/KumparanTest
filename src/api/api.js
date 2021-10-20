@@ -15,3 +15,7 @@ export const getCommentsByPostIdApi = (postId) => {
 export const postReplyApi = (postId, dataReply) => {
   return apiClient.post(`/posts/${postId}/comments`, dataReply);
 };
+
+export const deleteReplyApi = (commentId) => {
+  return apiClient.delete(`/comments/${commentId}`);
+};

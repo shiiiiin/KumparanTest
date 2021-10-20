@@ -4,7 +4,12 @@ import { Collapse } from "react-collapse";
 import PropTypes from "prop-types";
 import userImage from "./../../assets/mexican.png";
 import { useDispatch, useSelector } from "react-redux";
-import { postReply, putReply } from "../../actions/actions";
+import {
+  postReply,
+  putReply,
+  deleteReply,
+  getCommentsByPostId,
+} from "../../actions/actions";
 
 const ListComments = ({ comments, postId }) => {
   const dispatch = useDispatch();
@@ -48,8 +53,11 @@ const ListComments = ({ comments, postId }) => {
     setIsEdit(true);
     setReply(bodyReply);
     setIdComment(commentId);
-    // console.log("edit");
-    // postId;
+  };
+
+  const handleDelete = async (commentId) => {
+    postId && dispatch(deleteReply(postId, commentId));
+    postId && dispatch(getCommentsByPostId(postId));
   };
   return (
     <Item.Extra>
@@ -79,7 +87,7 @@ const ListComments = ({ comments, postId }) => {
                         >
                           Edit
                         </p>
-                        <p>Delete</p>
+                        <p onClick={() => handleDelete(comment.id)}>Delete</p>
                       </Comment.Action>
                     )}
                   </Comment.Content>

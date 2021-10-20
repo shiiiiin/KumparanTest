@@ -20,7 +20,7 @@ const ListPost = () => {
 
   useEffect(() => {
     if (posts.length !== 0 && !isGotComments) {
-      dispatch(getCommentsByPostId());
+      dispatch(getCommentsByPostId({}));
       setIsGotComment(true);
     }
   }, [posts, isGotComments]);
