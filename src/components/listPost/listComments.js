@@ -4,7 +4,8 @@ import { Collapse } from "react-collapse";
 import PropTypes from "prop-types";
 import userImage from "./../../assets/mexican.png";
 import { useDispatch, useSelector } from "react-redux";
-import { postReply, putReply, deleteReply } from "../../actions/actions";
+import { postReply, deleteReply } from "../../actions/actions";
+import { ModalEditComment } from "..";
 
 const ListComments = ({ comments, postId }) => {
   const dispatch = useDispatch();
@@ -18,8 +19,8 @@ const ListComments = ({ comments, postId }) => {
 
   const [isOpenComment, setIsOpenComment] = useState(false);
   const [reply, setReply] = useState("");
-  const [isEdit, setIsEdit] = useState(false);
-  const [idComment, setIdComment] = useState(null);
+  const [isOpenModalEditComment, setisOpenModalEditComment] = useState(false);
+  const [selectedComment, setselectedComment] = useState(null);
 
   const handleOpenComments = () => {
     setIsOpenComment(true);
@@ -33,21 +34,19 @@ const ListComments = ({ comments, postId }) => {
     setReply(e.target.value);
   };
 
-  const handlePostComment = () => {
-    if (isEdit) {
-      dispatch(putReply(postId, idComment, reply));
-    } else {
-      postId && dispatch(postReply(postId, reply));
-    }
+  const handlePostComment = async () => {
+    postId && (await dispatch(postReply(postId, reply)));
     setReply("");
-    setIsEdit(false);
-    setIdComment(null);
   };
 
-  const handleEdit = (bodyReply, commentId) => {
-    setIsEdit(true);
-    setReply(bodyReply);
-    setIdComment(commentId);
+  const handleEdit = (dataComment) => {
+    setisOpenModalEditComment(true);
+    setselectedComment(dataComment);
+  };
+
+  const handleCloseModalEditComment = () => {
+    setisOpenModalEditComment(false);
+    setselectedComment(null);
   };
 
   const handleDelete = (commentId) => {
@@ -77,7 +76,7 @@ const ListComments = ({ comments, postId }) => {
                       <Comment.Action style={{ display: "flex" }}>
                         <p
                           style={{ marginRight: "10px" }}
-                          onClick={() => handleEdit(comment.body, comment.id)}
+                          onClick={() => handleEdit(comment)}
                         >
                           Edit
                         </p>
@@ -92,11 +91,7 @@ const ListComments = ({ comments, postId }) => {
               <Form.TextArea value={reply} onChange={handleChange} />
               {error && <p style={{ color: "red" }}>{error}</p>}
               <Button
-                content={
-                  isLoadingPostReply
-                    ? "Loading..."
-                    : `${isEdit ? "Edit" : "Add"} Comment`
-                }
+                content={isLoadingPostReply ? "Loading..." : `Add Comment`}
                 labelPosition="left"
                 icon="edit"
                 primary
@@ -113,6 +108,11 @@ const ListComments = ({ comments, postId }) => {
           Hide Comment
         </Button>
       </Collapse>
+      <ModalEditComment
+        open={isOpenModalEditComment}
+        data={selectedComment}
+        closeModal={handleCloseModalEditComment}
+      />
     </Item.Extra>
   );
 };
