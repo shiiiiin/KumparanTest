@@ -16,6 +16,7 @@ import {
   POST_POSTING_PENDING,
   POST_POSTING_FULFILLED,
   POST_POSTING_REJECTED,
+  DELETE_REPLY,
 } from "../actions/actionTypes";
 import _ from "lodash";
 const initialstate = {
@@ -160,6 +161,34 @@ const reducer = (state = initialstate, action) => {
         posts: {
           ...state.posts,
           data: newPosts,
+        },
+      };
+    }
+
+    case DELETE_REPLY: {
+      const { postId, commentId } = action.data;
+
+      let clonePostsDeleteReply = _.clone(state.posts.data);
+      // eslint-disable-next-line
+      const selectedIdxPost = clonePostsDeleteReply.findIndex(
+        (post) => post.id == postId
+      );
+      // eslint-disable-next-line
+      const selectedIdxComment = clonePostsDeleteReply[
+        selectedIdxPost
+      ].comments.findIndex((c) => c.id == commentId);
+
+      let clonecomments = _.clone(
+        clonePostsDeleteReply[selectedIdxPost].comments
+      );
+
+      clonecomments.splice(selectedIdxComment, 1);
+      clonePostsDeleteReply[selectedIdxPost].comments = clonecomments;
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          data: clonePostsDeleteReply,
         },
       };
     }

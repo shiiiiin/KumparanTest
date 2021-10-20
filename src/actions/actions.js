@@ -12,7 +12,6 @@ import {
   getPostListApi,
   getCommentsByPostIdApi,
   postReplyApi,
-  deleteReplyApi,
   postPostingApi,
 } from "../api/api";
 
@@ -95,7 +94,7 @@ export const deleteReply = (postId, commentId) => {
   return (dispatch) => {
     return dispatch({
       type: DELETE_REPLY,
-      payload: deleteReplyApi(postId, commentId),
+      data: { postId, commentId },
     });
   };
 };
