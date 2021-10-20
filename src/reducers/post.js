@@ -18,6 +18,7 @@ import {
   POST_POSTING_REJECTED,
   DELETE_REPLY,
   PUT_POSTING,
+  DELETE_POSTING,
 } from "../actions/actionTypes";
 import _ from "lodash";
 const initialstate = {
@@ -236,6 +237,25 @@ const reducer = (state = initialstate, action) => {
         ...state,
         posts: {
           data: clonePostPut,
+        },
+      };
+    }
+
+    case DELETE_POSTING: {
+      const { id } = action.data;
+
+      let clonePostDelete = _.clone(state.posts.data);
+      // eslint-disable-next-line
+      const selectedIdxPost = clonePostDelete.findIndex(
+        (post) => post.id == id
+      );
+      // eslint-disable-next-line
+      clonePostDelete.splice(selectedIdxPost, 1);
+
+      return {
+        ...state,
+        posts: {
+          data: clonePostDelete,
         },
       };
     }

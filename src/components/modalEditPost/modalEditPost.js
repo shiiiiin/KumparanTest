@@ -39,12 +39,7 @@ const ModalEditPost = ({ open, data, closeModal }) => {
     closeModal();
   };
   return (
-    <Modal
-      closeIcon
-      open={open}
-      onClose={closeModal}
-      //   onOpen={() => setOpen(true)}
-    >
+    <Modal closeIcon open={open} onClose={closeModal}>
       <Header icon="edit" content="Edit" />
       <Modal.Content>
         <Form reply>

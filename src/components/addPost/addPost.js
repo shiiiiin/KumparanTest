@@ -18,8 +18,10 @@ const AddPost = () => {
     setTitle(e.target.value);
   };
 
-  const handlePosting = () => {
-    dispatch(postPosting(title, body));
+  const handlePosting = async () => {
+    await dispatch(postPosting(title, body));
+    setBody("");
+    setTitle("");
   };
   return (
     <div style={{ width: "90%", marginTop: "20px" }}>

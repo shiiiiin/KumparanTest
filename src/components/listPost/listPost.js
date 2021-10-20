@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dimmer, Divider, Item, Loader } from "semantic-ui-react";
-import { getCommentsByPostId, getPostList } from "../../actions/actions";
+import {
+  getCommentsByPostId,
+  getPostList,
+  deletePosting,
+} from "../../actions/actions";
 import ModalEditPost from "../modalEditPost/modalEditPost";
 import userImage from "./../../assets/mexican.png";
 import ListComments from "./listComments";
@@ -34,6 +38,9 @@ const ListPost = () => {
     setselectedPost(post);
   };
 
+  const handleDelete = (post) => {
+    dispatch(deletePosting(post));
+  };
   const handleCloseModal = () => {
     setisOpenModalEditPost(false);
   };
@@ -80,7 +87,7 @@ const ListPost = () => {
                           padding: 0,
                           color: "blue",
                         }}
-                        // onClick={() => handleDelete(comment.id)}
+                        onClick={() => handleDelete(post)}
                       >
                         Delete
                       </Button>
