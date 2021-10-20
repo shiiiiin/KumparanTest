@@ -17,6 +17,7 @@ import {
   POST_POSTING_FULFILLED,
   POST_POSTING_REJECTED,
   DELETE_REPLY,
+  PUT_POSTING,
 } from "../actions/actionTypes";
 import _ from "lodash";
 const initialstate = {
@@ -28,6 +29,8 @@ const initialstate = {
   errorPostReply: "",
   isLoadingPosting: false,
   errorPosting: "",
+  isLoadingPutPosting: false,
+  errorPutPosting: "",
 };
 
 const reducer = (state = initialstate, action) => {
@@ -215,6 +218,25 @@ const reducer = (state = initialstate, action) => {
         ...state,
         isLoadingPosting: false,
         errorPosting: "Failed, please try again",
+      };
+    }
+    case PUT_POSTING: {
+      const { id } = action.data;
+
+      let clonePostPut = _.clone(state.posts.data);
+      // eslint-disable-next-line
+      const selectedIdxPost = clonePostPut.findIndex((post) => post.id == id);
+      // eslint-disable-next-line
+      clonePostPut[selectedIdxPost] = {
+        ...clonePostPut[selectedIdxPost],
+        ...action.data,
+      };
+
+      return {
+        ...state,
+        posts: {
+          data: clonePostPut,
+        },
       };
     }
 

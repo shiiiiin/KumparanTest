@@ -6,6 +6,7 @@ import {
   PUT_REPLY,
   DELETE_REPLY,
   POST_POSTING,
+  PUT_POSTING,
 } from "./actionTypes";
 import {
   getUserListApi,
@@ -111,6 +112,15 @@ export const postPosting = (title, body) => {
     return dispatch({
       type: POST_POSTING,
       payload: postPostingApi(dataPosting),
+    });
+  };
+};
+
+export const putPostting = (dataPosting) => {
+  return (dispatch) => {
+    return dispatch({
+      type: PUT_POSTING,
+      data: dataPosting,
     });
   };
 };
