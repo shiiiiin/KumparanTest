@@ -3,9 +3,20 @@ import { Button, Item, Comment, Header, Form } from "semantic-ui-react";
 import { Collapse } from "react-collapse";
 import PropTypes from "prop-types";
 import userImage from "./../../assets/mexican.png";
+import { useDispatch, useSelector } from "react-redux";
+import { postReply } from "../../actions/actions";
 
-const ListComments = ({ comments }) => {
+const ListComments = ({ comments, postId }) => {
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.post.errorPostReply);
+  const isLoadingPostReply = useSelector(
+    (state) => state.post.isLoadingPostReply
+  );
+
+  const commentLength = comments ? comments.length : 0;
+
   const [isOpenComment, setIsOpenComment] = useState(false);
+  const [reply, setReply] = useState("");
 
   const handleOpenComments = () => {
     setIsOpenComment(true);
@@ -14,7 +25,15 @@ const ListComments = ({ comments }) => {
   const handleCloseComments = () => {
     setIsOpenComment(false);
   };
-  const commentLength = comments ? comments.length : 0;
+
+  const handleChange = (e) => {
+    setReply(e.target.value);
+  };
+
+  const handlePostComment = () => {
+    postId && dispatch(postReply(postId, reply));
+    setReply("");
+  };
   return (
     <Item.Extra>
       <Button
@@ -40,12 +59,14 @@ const ListComments = ({ comments }) => {
               ))}
 
             <Form reply>
-              <Form.TextArea />
+              <Form.TextArea value={reply} onChange={handleChange} />
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <Button
-                content="Add Reply"
+                content={isLoadingPostReply ? "Loading..." : "Add Reply"}
                 labelPosition="left"
                 icon="edit"
                 primary
+                onClick={handlePostComment}
               />
             </Form>
           </Comment.Group>
@@ -64,6 +85,7 @@ const ListComments = ({ comments }) => {
 
 ListComments.propTypes = {
   comments: PropTypes.array,
+  postId: PropTypes.number,
 };
 
 export default ListComments;

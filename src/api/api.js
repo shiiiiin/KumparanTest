@@ -11,3 +11,7 @@ export const getPostListApi = () => {
 export const getCommentsByPostIdApi = (postId) => {
   return apiClient.get(`/posts/${postId}/comments`);
 };
+
+export const postReplyApi = (postId, dataReply) => {
+  return apiClient.post(`/posts/${postId}/comments`, dataReply);
+};

@@ -7,6 +7,10 @@ import {
   GET_COMMENTS_BY_POST_ID_PENDING,
   GET_COMMENTS_BY_POST_ID_FULFILLED,
   GET_COMMENTS_BY_POST_ID_REJECTED,
+  POST_REPLY,
+  POST_REPLY_PENDING,
+  POST_REPLY_FULFILLED,
+  POST_REPLY_REJECTED,
 } from "../actions/actionTypes";
 import _ from "lodash";
 const initialstate = {
@@ -14,6 +18,8 @@ const initialstate = {
     meta: { isLoading: false },
     data: [],
   },
+  isLoadingPostReply: false,
+  errorPostReply: "",
 };
 
 const reducer = (state = initialstate, action) => {
@@ -84,6 +90,40 @@ const reducer = (state = initialstate, action) => {
             error: "Failed get post, please refresh the page",
           },
         },
+      };
+    }
+
+    case POST_REPLY: {
+      return { ...state };
+    }
+    case POST_REPLY_PENDING: {
+      return { ...state, isLoadingPostReply: true };
+    }
+    case POST_REPLY_FULFILLED: {
+      const comment = action.payload.data;
+      const postId = comment ? comment.postId : null;
+      let newPosts = _.clone(state.posts.data);
+      // eslint-disable-next-line
+      const selectedIdxPost = newPosts.findIndex((post) => post.id == postId);
+      newPosts[selectedIdxPost] = {
+        ...newPosts[selectedIdxPost],
+        comments: [...newPosts[selectedIdxPost].comments, action.payload.data],
+      };
+
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          data: newPosts,
+        },
+        isLoadingPostReply: false,
+      };
+    }
+    case POST_REPLY_REJECTED: {
+      return {
+        ...state,
+        isLoadingPostReply: false,
+        errorPostReply: "Failed post reply, please try again",
       };
     }
 

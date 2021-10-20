@@ -6,6 +6,11 @@ import {
 } from "../actions/actionTypes";
 
 const initialstate = {
+  loginUser: {
+    email: "shintiatria@gmail.com",
+    name: "Shintia Tria Sari",
+    username: "Shintiatria",
+  },
   users: {
     meta: { isLoading: false },
     data: [],

@@ -46,7 +46,7 @@ const ListPost = () => {
                 <Item.Header as="a">{post.title}</Item.Header>
                 <Item.Meta>{user?.username ?? "Anonim"}</Item.Meta>
                 <Item.Description>{post.body}</Item.Description>
-                <ListComments comments={post.comments} />
+                <ListComments comments={post.comments} postId={post.id} />
                 <Divider />
               </Item.Content>
             </Item>
