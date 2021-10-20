@@ -23,3 +23,7 @@ export const deleteReplyApi = (commentId) => {
 export const postPostingApi = (dataPosting) => {
   return apiClient.post(`/posts`, dataPosting);
 };
+
+export const getAlbumsApi = () => {
+  return apiClient.get(`/albums`);
+};

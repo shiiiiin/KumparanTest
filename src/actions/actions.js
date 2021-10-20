@@ -8,6 +8,7 @@ import {
   POST_POSTING,
   PUT_POSTING,
   DELETE_POSTING,
+  GET_ALBUMS,
 } from "./actionTypes";
 import {
   getUserListApi,
@@ -15,6 +16,7 @@ import {
   getCommentsByPostIdApi,
   postReplyApi,
   postPostingApi,
+  getAlbumsApi,
 } from "../api/api";
 
 export const getUserList = () => {
@@ -131,6 +133,15 @@ export const deletePosting = (dataPosting) => {
     return dispatch({
       type: DELETE_POSTING,
       data: dataPosting,
+    });
+  };
+};
+
+export const getAlbums = () => {
+  return (dispatch) => {
+    return dispatch({
+      type: GET_ALBUMS,
+      payload: getAlbumsApi(),
     });
   };
 };
