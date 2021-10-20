@@ -11,7 +11,7 @@ const ListPost = () => {
   const isLoading = useSelector(
     (state) => state.post?.posts?.meta?.isLoading ?? false
   );
-  // const error = useSelector((state) => state.user?.users?.meta?.error ?? null);
+  const error = useSelector((state) => state.post?.posts?.meta?.error ?? null);
 
   useEffect(() => {
     users && dispatch(getPostList());
@@ -26,21 +26,25 @@ const ListPost = () => {
   }
   return (
     <Item.Group>
-      {posts?.reverse()?.map((post) => {
-        const user = users.find((user) => user.id === post.userId);
-        return (
-          <Item key={post.id}>
-            <Item.Image size="mini" src={userImage} />
-            <Item.Content>
-              <Item.Header as="a">{post.title}</Item.Header>
-              <Item.Meta>{user.username}</Item.Meta>
-              <Item.Description>{post.body}</Item.Description>
-              <Item.Extra>Additional Details</Item.Extra>
-              <Divider />
-            </Item.Content>
-          </Item>
-        );
-      })}
+      {error ? (
+        <p>{error}</p>
+      ) : (
+        posts?.reverse()?.map((post) => {
+          const user = users.find((user) => user.id === post.userId);
+          return (
+            <Item key={post.id}>
+              <Item.Image size="mini" src={userImage} />
+              <Item.Content>
+                <Item.Header as="a">{post.title}</Item.Header>
+                <Item.Meta>{user.username}</Item.Meta>
+                <Item.Description>{post.body}</Item.Description>
+                <Item.Extra>Additional Details</Item.Extra>
+                <Divider />
+              </Item.Content>
+            </Item>
+          );
+        })
+      )}
     </Item.Group>
   );
 };

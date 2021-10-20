@@ -38,7 +38,7 @@ const reducer = (state = initialstate, action) => {
           data: [],
           meta: {
             isLoading: false,
-            error: "Failed get user, please refresh the page",
+            error: "Failed get post, please refresh the page",
           },
         },
       };
