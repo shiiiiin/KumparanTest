@@ -4,7 +4,7 @@ import { Collapse } from "react-collapse";
 import PropTypes from "prop-types";
 import userImage from "./../../assets/mexican.png";
 import { useDispatch, useSelector } from "react-redux";
-import { postReply } from "../../actions/actions";
+import { postReply, putReply } from "../../actions/actions";
 
 const ListComments = ({ comments, postId }) => {
   const dispatch = useDispatch();
@@ -12,11 +12,14 @@ const ListComments = ({ comments, postId }) => {
   const isLoadingPostReply = useSelector(
     (state) => state.post.isLoadingPostReply
   );
+  const loginUser = useSelector((state) => state.user.loginUser);
 
   const commentLength = comments ? comments.length : 0;
 
   const [isOpenComment, setIsOpenComment] = useState(false);
   const [reply, setReply] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [idComment, setIdComment] = useState(null);
 
   const handleOpenComments = () => {
     setIsOpenComment(true);
@@ -31,8 +34,22 @@ const ListComments = ({ comments, postId }) => {
   };
 
   const handlePostComment = () => {
-    postId && dispatch(postReply(postId, reply));
+    if (isEdit) {
+      dispatch(putReply(postId, idComment, reply));
+    } else {
+      postId && dispatch(postReply(postId, reply));
+    }
     setReply("");
+    setIsEdit(false);
+    setIdComment(null);
+  };
+
+  const handleEdit = async (bodyReply, commentId) => {
+    setIsEdit(true);
+    setReply(bodyReply);
+    setIdComment(commentId);
+    // console.log("edit");
+    // postId;
   };
   return (
     <Item.Extra>
@@ -54,6 +71,17 @@ const ListComments = ({ comments, postId }) => {
                   <Comment.Content>
                     <Comment.Author as="a">{comment.email}</Comment.Author>
                     <Comment.Text>{comment.body}</Comment.Text>
+                    {loginUser.email === comment.email && (
+                      <Comment.Action style={{ display: "flex" }}>
+                        <p
+                          style={{ marginRight: "10px" }}
+                          onClick={() => handleEdit(comment.body, comment.id)}
+                        >
+                          Edit
+                        </p>
+                        <p>Delete</p>
+                      </Comment.Action>
+                    )}
                   </Comment.Content>
                 </Comment>
               ))}
@@ -62,7 +90,11 @@ const ListComments = ({ comments, postId }) => {
               <Form.TextArea value={reply} onChange={handleChange} />
               {error && <p style={{ color: "red" }}>{error}</p>}
               <Button
-                content={isLoadingPostReply ? "Loading..." : "Add Reply"}
+                content={
+                  isLoadingPostReply
+                    ? "Loading..."
+                    : `${isEdit ? "Edit" : "Add"} Comment`
+                }
                 labelPosition="left"
                 icon="edit"
                 primary

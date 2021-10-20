@@ -11,6 +11,7 @@ import {
   POST_REPLY_PENDING,
   POST_REPLY_FULFILLED,
   POST_REPLY_REJECTED,
+  PUT_REPLY,
 } from "../actions/actionTypes";
 import _ from "lodash";
 const initialstate = {
@@ -127,6 +128,30 @@ const reducer = (state = initialstate, action) => {
       };
     }
 
+    case PUT_REPLY: {
+      const comment = action.data.dataReply;
+      const postId = comment ? comment.postId : null;
+      const commentId = comment ? comment.id : null;
+      let newPosts = _.clone(state.posts.data);
+      // eslint-disable-next-line
+      const selectedIdxPost = newPosts.findIndex((post) => post.id == postId);
+      // eslint-disable-next-line
+      const selectedIdxComment = newPosts[selectedIdxPost].comments.findIndex(
+        (c) => c.id == commentId
+      );
+
+      newPosts[selectedIdxPost].comments[selectedIdxComment] = {
+        ...comment,
+      };
+
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          data: newPosts,
+        },
+      };
+    }
     default:
       return state;
   }
