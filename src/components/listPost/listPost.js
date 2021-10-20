@@ -23,7 +23,7 @@ const ListPost = () => {
   const error = useSelector((state) => state.post?.posts?.meta?.error ?? null);
 
   useEffect(() => {
-    dispatch(getPostList());
+    posts.length === 0 && dispatch(getPostList());
   }, []);
 
   useEffect(() => {
