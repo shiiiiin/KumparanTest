@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimmer, Divider, Item, Loader } from "semantic-ui-react";
-import { getPostList } from "../../actions/actions";
+import { getCommentsByPostId, getPostList } from "../../actions/actions";
 import userImage from "./../../assets/mexican.png";
-
+import ListComments from "./listComments";
 const ListPost = () => {
   const dispatch = useDispatch();
+  const [isGotComments, setIsGotComment] = useState(false);
   const posts = useSelector((state) => state.post?.posts?.data ?? []);
   const users = useSelector((state) => state.user?.users?.data ?? []);
   const isLoading = useSelector(
@@ -14,8 +15,15 @@ const ListPost = () => {
   const error = useSelector((state) => state.post?.posts?.meta?.error ?? null);
 
   useEffect(() => {
-    users && dispatch(getPostList());
-  }, [users]);
+    dispatch(getPostList());
+  }, []);
+
+  useEffect(() => {
+    if (posts.length !== 0 && !isGotComments) {
+      dispatch(getCommentsByPostId());
+      setIsGotComment(true);
+    }
+  }, [posts, isGotComments]);
 
   if (isLoading) {
     return (
@@ -25,20 +33,20 @@ const ListPost = () => {
     );
   }
   return (
-    <Item.Group>
+    <Item.Group style={{ paddingTop: "20px" }}>
       {error ? (
         <p>{error}</p>
       ) : (
         posts?.reverse()?.map((post) => {
-          const user = users.find((user) => user.id === post.userId);
+          const user = users?.find((user) => user.id === post.userId) ?? null;
           return (
             <Item key={post.id}>
               <Item.Image size="mini" src={userImage} />
               <Item.Content>
                 <Item.Header as="a">{post.title}</Item.Header>
-                <Item.Meta>{user.username}</Item.Meta>
+                <Item.Meta>{user?.username ?? "Anonim"}</Item.Meta>
                 <Item.Description>{post.body}</Item.Description>
-                <Item.Extra>Additional Details</Item.Extra>
+                <ListComments comments={post.comments} />
                 <Divider />
               </Item.Content>
             </Item>

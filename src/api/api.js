@@ -7,3 +7,7 @@ export const getUserListApi = () => {
 export const getPostListApi = () => {
   return apiClient.get(`/posts`);
 };
+
+export const getCommentsByPostIdApi = (postId) => {
+  return apiClient.get(`/posts/${postId}/comments`);
+};
