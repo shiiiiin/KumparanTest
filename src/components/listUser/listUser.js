@@ -37,10 +37,7 @@ const ListUser = () => {
                 <Feed.Label image={userImage} />
                 <Feed.Content>
                   <Feed.Date content={user.username} />
-                  <Feed.Summary>
-                    {user.name}
-                    <br /> post album
-                  </Feed.Summary>
+                  <Feed.Summary>{user.name}</Feed.Summary>
                 </Feed.Content>
               </Feed.Event>
             ))}
